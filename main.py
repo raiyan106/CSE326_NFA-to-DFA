@@ -21,7 +21,7 @@ tran={
 #state Structure
 state={
     'no':None,
-    tranlist=[tran for i in range(STATES)]
+    'tranlist':[tran for i in range(STATES)]
 }
 
 stackA = [None]*100
@@ -45,8 +45,49 @@ def pushB(z):
     stackB[Bptr]=z
 
 def popA():
-    Aptr=Aptr-1
-    return stackA[Aptr]
+    val = stackA[Aptr]
+    Aptr-=1
+    return val
 
 def copy(i):
-    
+    temp=[None]*(STATES+1)
+    temp[0]=" "
+    k=0
+    Bptr=-1
+    temp = list(Dstates[i].StateString)
+    while(temp[k] is not None):
+        pushB(int(temp[k])-'0')
+        k+=1
+
+
+def popB():
+    val = stackB[Bptr]
+    Bptr-=1
+    return val
+
+def peekB():
+    return stackA[Bptr]
+
+def peekA():
+    return stackA[Aptr]
+
+def seek(arr,ptr,s):
+    for i in range(ptr+1):
+        if s==arr[i]:
+            return 1
+    return 0
+
+def sort():
+    tempo=None
+    for i in range(Bptr):
+        for j in range(Bptr-1):
+            if stackB[j]>stackB[j+1]:
+                tempo=stackB[j]
+                stackB[j]=stackB[j+1]
+                stackB[j+1]=tempo
+
+def toString():
+    sort();
+    for i in range(Bptr+1):
+        
+                
