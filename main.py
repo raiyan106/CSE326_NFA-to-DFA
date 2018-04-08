@@ -54,7 +54,7 @@ def copy(i):
     temp[0]=" "
     k=0
     Bptr=-1
-    temp = list(Dstates[i].StateString)
+    temp = list(Dstates[i]['StateString'])
     while(temp[k] is not None):
         pushB(int(temp[k])-'0')
         k+=1
@@ -89,5 +89,52 @@ def sort():
 def toString():
     sort();
     for i in range(Bptr+1):
+        temp[i]=str(stackB[i])
+    temp[i]=None
+
+def display_DTran():
+    print("\n\t\t DFA Transition Table ")
+    print("\n\t\t ---------------------")
+    print("\nStates\tString\tInputs\n ")
+    for i in range(noi):
+        print("\t{}".format(inp[i]))
+    print("\n \t------------------")
+
+    for i in range(nods):
+        if(Dstates[i]['is_final']==0):
+            print("\n{}".format(Dstates[i]['name']))
+        else:
+            print("\n*{}".format(Dstates[0]['name']))
         
-                
+        print("\t{}".format(Dstates[i]['StateString']))
+
+        for j in range(noi):
+            print("\t{}".format(Dstates[i]['trans'][j]))
+    
+    print("\n")
+
+def move(st,j):
+    ctr=0
+    while(ctr<States[st]['tranlist'][j]['notran']):
+        pushA(States[st]['tranlist'][j]['tostates'][ctr])
+        ctr+=1
+
+
+def lambda_closure(st):
+    ctr = 0
+    in_state=st
+    curst = st
+    chk = None
+    while(Aptr!=-1):
+        curst = popA()
+        ctr = 0
+        in_state = curst
+        while(ctr<=States[curst]['tranlist'][noi]['notran']):
+            chk = seek(stackB,Bptr,in_state)
+            if(chk==0):
+                pushB(in_state)
+            in_state = States[curst]['tranlist'][noi]['tostates'][ctr]
+            ctr+=1
+            chk = seek(stackA,Aptr,in_state)
+            if(chk==0 and ctr<=States[curst]['tranlist'][noi]['notran']):
+                pushA(in_state)
